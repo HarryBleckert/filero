@@ -267,6 +267,11 @@ class assignsubmission_filero_filero {
      */
     public function PutMoodleAssignmentSubmission() {
         global $DB;
+
+        set_time_limit(1800);
+        $memory_limit =  ini_get("memory_limit";
+        ini_set("memory_limit", ("2400M");
+
         $starttime = time();
         $filerotimecreated = $filerotimemodified = $filerocode = $fileroid = 0;
         $fileromsg = "";
@@ -274,7 +279,7 @@ class assignsubmission_filero_filero {
         // $this->showSpinner();  // showing only after page load!
         $this->output = "\n\nSubmission ID: " . trim($this->submission->id) . "\n";
         $this->output .= "Date: " . date("D, d.m.Y H:i:s e")
-                . " (UTC offset: " . $this->utcOffset . "s). Memory used: "
+                . " (UTC offset: " . $this->utcOffset . "s). Memory Limit: $memory_limit. Memory used: "
                 . (round(memory_get_peak_usage(true) / 1024 / 1024)) . "M of " . ini_get('memory_limit') . "\n"
                 . "Submission from: User id " . $this->submission->userid
                 . " stored in assign_submission with id:" . $this->submission->id . "\n";
@@ -282,9 +287,6 @@ class assignsubmission_filero_filero {
         if (!$this->LoginToFilero()) {
             return $this->status;
         }
-
-        set_time_limit(1800);
-        ini_set("memory_limit", "2400M");
         $assign = $this->assign;
         //$this->output .= "\n\nassign: \n" . var_dump($assign). "\n\n";
         // $DB->get_record("assign", array("id" => $this->submission->assignment));
