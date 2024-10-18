@@ -40,10 +40,10 @@ $settings->add($element);
 // check/set PHP memory limit
 $name = new lang_string('memory_limit', 'assignsubmission_filero');
 $description = new lang_string('memory_limit_help', 'assignsubmission_filero');
-$element = new admin_setting_configcheckbox('assignsubmission_filero/memory_limit',
+$element = new admin_setting_configtext('assignsubmission_filero/memory_limit',
         $name,
         $description,
-        2400);
+        "2400M");
 $settings->add($element);
 
 

@@ -82,6 +82,7 @@ class assignsubmission_filero_filero {
             */
         }
         // $this->cm = $cm;
+        $this->config = get_config('assignsubmission_filero');
         $this->files = $files;
         $this->filearea = $filearea;
         // $this->submissiondata = $submissiondata;
@@ -176,7 +177,7 @@ class assignsubmission_filero_filero {
      */
     private function LoginToFilero() {
 
-        $config = get_config('assignsubmission_filero');
+        $config = $this->config;
         $location = $config->location; // full WSDL API URL
         $username = $config->username;
         $password = $config->password;
@@ -270,8 +271,10 @@ class assignsubmission_filero_filero {
 
         set_time_limit(1800);
         $memory_limit =  ini_get("memory_limit");
-        ini_set("memory_limit", intval(substr($memory_limit,0,-1))<2400
-                ?"2400M" :$memory_limit);
+        $plugin_memory = $this->config->memory_limit;
+        if (intval(substr($memory_limit,0,-1)) < intval(substr($plugin_memory,0,-1))){
+            ini_set("memory_limit", $plugin_memory);
+        }
 
         $starttime = time();
         $filerotimecreated = $filerotimemodified = $filerocode = $fileroid = 0;
@@ -280,7 +283,8 @@ class assignsubmission_filero_filero {
         // $this->showSpinner();  // showing only after page load!
         $this->output = "\n\nSubmission ID: " . trim($this->submission->id) . "\n";
         $this->output .= "Date: " . date("D, d.m.Y H:i:s e")
-                . " (UTC offset: " . $this->utcOffset . "s). configured PHP memory Limit: $memory_limit. Memory used: "
+                . " (UTC offset: " . $this->utcOffset . "s). Configured PHP memory Limit: $memory_limit. "
+                ."Plugin memory limit: $plugin_memory. Memory used: "
                 . (round(memory_get_peak_usage(true) / 1024 / 1024)) . "M of " . ini_get('memory_limit') . "\n"
                 . "Submission from: User id " . $this->submission->userid
                 . " stored in assign_submission with id:" . $this->submission->id . "\n";
@@ -573,6 +577,13 @@ class assignsubmission_filero_filero {
         $fileromsg = "";
         $validated_files = array();
         // $this->showSpinner();  // showing only after page load!
+        set_time_limit(1800);
+        $memory_limit =  ini_get("memory_limit");
+        $plugin_memory = $this->config->memory_limit;
+        if (intval(substr($memory_limit,0,-1)) < intval(substr($plugin_memory,0,-1))){
+            ini_set("memory_limit", $plugin_memory);
+        }
+
         $grade = $this->grade;
         $assign = $this->assign;
         $assignfeedback_file = $DB->get_record('assignfeedback_file',
@@ -583,15 +594,14 @@ class assignsubmission_filero_filero {
 
         $this->output = "\n\nSubmission ID: " . trim($this->submission->id) . "\n";
         $this->output .= "Date: " . date("D, d.m.Y H:i:s e")
-                . " (UTC offset: " . $this->utcOffset . "s). Memory used: "
+                . " (UTC offset: " . $this->utcOffset . "s). Configured PHP memory Limit: $memory_limit. "
+                ."Plugin memory limit: $plugin_memory. Memory used: "
                 . (round(memory_get_peak_usage(true) / 1024 / 1024)) . "M of " . ini_get('memory_limit') . "\n"
                 . "Feedback and grading from: Grader id " . $grade->grader . " stored in grade with id:" . $grade->id . "\n";
         if (!$this->LoginToFilero()) {
             return $this->status;
         }
 
-        set_time_limit(1800);
-        ini_set("memory_limit", "1500M");
         $cm = get_coursemodule_from_instance('assign', $assign->id, $assign->course);
         $context = context_module::instance($cm->id);
         $course = $DB->get_record("course", array("id" => $assign->course));
