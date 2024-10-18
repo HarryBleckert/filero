@@ -788,7 +788,7 @@ class assignsubmission_filero_filero {
 
         if (stristr($fileromsg, "error")){
             assignsubmission_filero_observer::observer_log("Error in PutMoodleAssignmentGrade: No data or files were archived!");
-            assignsubmission_filero_observer::observer_log("ErrorMsg: " . $fileroRes->fileromsg);
+            assignsubmission_filero_observer::observer_log("ErrorMsg: " . $fileromsg);
             $this->SoapDebug($this->client);
         }
 
