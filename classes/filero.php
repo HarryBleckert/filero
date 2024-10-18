@@ -270,7 +270,8 @@ class assignsubmission_filero_filero {
 
         set_time_limit(1800);
         $memory_limit =  ini_get("memory_limit");
-        ini_set("memory_limit", "2400M");
+        ini_set("memory_limit", intval(substr($memory_limit,0,-1))<2400
+                ?"2400M" :$memory_limit);
 
         $starttime = time();
         $filerotimecreated = $filerotimemodified = $filerocode = $fileroid = 0;
