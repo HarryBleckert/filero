@@ -280,7 +280,7 @@ class assignsubmission_filero_filero {
         // $this->showSpinner();  // showing only after page load!
         $this->output = "\n\nSubmission ID: " . trim($this->submission->id) . "\n";
         $this->output .= "Date: " . date("D, d.m.Y H:i:s e")
-                . " (UTC offset: " . $this->utcOffset . "s). Memory Limit: $memory_limit. Memory used: "
+                . " (UTC offset: " . $this->utcOffset . "s). configured PHP memory Limit: $memory_limit. Memory used: "
                 . (round(memory_get_peak_usage(true) / 1024 / 1024)) . "M of " . ini_get('memory_limit') . "\n"
                 . "Submission from: User id " . $this->submission->userid
                 . " stored in assign_submission with id:" . $this->submission->id . "\n";
