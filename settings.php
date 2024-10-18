@@ -37,6 +37,16 @@ $element = new admin_setting_configcheckbox('assignsubmission_filero/use_archivi
         1);
 $settings->add($element);
 
+// check/set PHP memory limit
+$name = new lang_string('memory_limit', 'assignsubmission_filero');
+$description = new lang_string('memory_limit_help', 'assignsubmission_filero');
+$element = new admin_setting_configcheckbox('assignsubmission_filero/memory_limit',
+        $name,
+        $description,
+        2400);
+$settings->add($element);
+
+
 $element = new admin_setting_configtext('assignsubmission_filero/location',
         'location',
         new lang_string('location', 'assignsubmission_filero'),

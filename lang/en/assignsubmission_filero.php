@@ -69,6 +69,8 @@ $string['fileroenabled'] = 'Archiving of file submissions and feedback files';
 $string['fileroenabled_help'] = 'Check activates legally assured archiving with FILERO';
 $string['filerofilename'] = 'filero.html';
 $string['filerosubmission'] = 'Allow archiving with Filero';
+$string['memory_limit'] = 'PHP Memory Limit';
+$string['memory_limit'] = 'PHP memory limit for FILERO archiving. Note that all files are streamed together and calculate memory usage of 2.5 x total file size';
 $string['numfilesforlog'] = 'Number of files: {$a}.';
 $string['pluginname'] = 'FILERO archiving';
 
