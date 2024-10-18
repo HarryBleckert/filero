@@ -271,7 +271,7 @@ class assignsubmission_filero_filero {
 
         set_time_limit(1800);
         $memory_limit =  ini_get("memory_limit");
-        $plugin_memory = $this->config->memory_limit;
+        $plugin_memory = $this->config->memory_limit ?:"2400M";
         if (intval(substr($memory_limit,0,-1)) < intval(substr($plugin_memory,0,-1))){
             ini_set("memory_limit", $plugin_memory);
         }
@@ -579,7 +579,7 @@ class assignsubmission_filero_filero {
         // $this->showSpinner();  // showing only after page load!
         set_time_limit(1800);
         $memory_limit =  ini_get("memory_limit");
-        $plugin_memory = $this->config->memory_limit;
+        $plugin_memory = $this->config->memory_limit ?:"2400M";
         if (intval(substr($memory_limit,0,-1)) < intval(substr($plugin_memory,0,-1))){
             ini_set("memory_limit", $plugin_memory);
         }
