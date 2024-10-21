@@ -1004,6 +1004,10 @@ class assign_submission_filero extends assign_submission_plugin {
         $filesubmission = $this->get_filero_submission($submission->id);
         $fileroRes = "-";
         $useArchiving = assign_submission_filero::use_archiving($submission);
+        $pluginfo = assign_submission_filero::get_plugin_version();
+        $info = "\n\n".$this->get_name()." Plugin Version: ".$pluginfo->version." - Release: "
+                .$pluginfo->release;
+        $fileroFiles = "";
         if ($filesubmission AND $useArchiving) {
             $fileroRes = $fileroFiles = $this->get_archived_files_info($submission);
             if (isset($_REQUEST['action']) and $_REQUEST['action'] != "grader"
@@ -1024,9 +1028,6 @@ class assign_submission_filero extends assign_submission_plugin {
                 }
 
                 $cm = context_module::instance($this->assignment->get_course_module()->id);
-                $pluginfo = assign_submission_filero::get_plugin_version();
-                $info = "\n\n".$this->get_name()." Plugin Version: ".$pluginfo->version." - Release: "
-                        .$pluginfo->release;
                 $fileroRes .= '<form method="POST" target="showLog" style="font-size:81%;display:inline;">
                             <input type="hidden" name="id" value="' . $cm->instanceid . '">
                             <input type="hidden" name="submissiontimemodified" value="'
