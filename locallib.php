@@ -1003,7 +1003,7 @@ class assign_submission_filero extends assign_submission_plugin {
         global $DB, $USER;
         $filesubmission = $this->get_filero_submission($submission->id);
         $fileroRes = "-";
-        $useArchiving = assign_submission_filero::use_archiving($submission));
+        $useArchiving = assign_submission_filero::use_archiving($submission);
         if ($filesubmission AND $useArchiving) {
             $fileroRes = $fileroFiles = $this->get_archived_files_info($submission);
             if (isset($_REQUEST['action']) and $_REQUEST['action'] != "grader"
