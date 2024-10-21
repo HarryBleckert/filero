@@ -1008,10 +1008,21 @@ class assign_submission_filero extends assign_submission_plugin {
         $info = "\n\n".$this->get_name()." Plugin Version: ".$pluginfo->version." - Release: "
                 .$pluginfo->release;
         $fileroFiles = "";
-        if ($filesubmission AND $useArchiving) {
+        if ($useArchiving) {
             $fileroRes = $fileroFiles = $this->get_archived_files_info($submission);
             if (isset($_REQUEST['action']) and $_REQUEST['action'] != "grader"
                     and (is_siteadmin() or !user_has_role_assignment($USER->id, 5))) {
+                unset($_SESSION['filero_submit_for_grading_' . $submission->id]);
+                if (!empty(assignsubmission_filero_filero::LogfilePath($submissionid))) {
+                    $cm = context_module::instance($this->assignment->get_course_module()->id);
+                    $fileroRes .= '<form method="POST" target="showLog" style="font-size:81%;display:inline;">
+                        <input type="hidden" name="id" value="' . $cm->instanceid . '">
+                        <input type="hidden" name="submissiontimemodified" value="'
+                            . $filesubmission->submissiontimemodified . '">
+                        <button name="assignsubmission_filero_showLog" value="' . $submission->id . '" 
+                         title="Studierende sehen diesen Button nicht!' . $info . '">Log anzeigen</button>'
+                            . "</form>\n";
+                }
                 // archive manually now if button was pressen
                 if (isset($_POST['assignsubmission_filero_archive'])
                         and $_POST['assignsubmission_filero_archive'] == $submission->id) {
@@ -1021,23 +1032,11 @@ class assign_submission_filero extends assign_submission_plugin {
                             . "'userid'=>$submission->userid, 'assignment'=>$submission->assignment!");
                     $this->submit_for_grading($submission);
                     // disable archiving for non-grader feedeback
-                    if ( !$this->is_student_assignment($submission)) {
+                    if (!$this->is_student_assignment($submission)) {
                         assignsubmission_filero_observer::archive_feedback($submission);
                     }
-                    unset($_SESSION['filero_submit_for_grading_' . $submission->id]);
                 }
-
-                $cm = context_module::instance($this->assignment->get_course_module()->id);
-                $fileroRes .= '<form method="POST" target="showLog" style="font-size:81%;display:inline;">
-                            <input type="hidden" name="id" value="' . $cm->instanceid . '">
-                            <input type="hidden" name="submissiontimemodified" value="'
-                        . $filesubmission->submissiontimemodified . '">
-                            <button name="assignsubmission_filero_showLog" value="' . $submission->id . '" 
-                             title="Studierende sehen diesen Button nicht!' . $info . '">Log anzeigen</button>'
-                        . "</form>\n";
             }
-        }
-        if ($useArchiving){
             $currentsubmission = $DB->get_record('assign_submission',
                     array('assignment' => $submission->assignment,'userid' => $submission->userid));
             if ($currentsubmission && $currentsubmission->status == "submitted") {
