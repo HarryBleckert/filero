@@ -1003,7 +1003,8 @@ class assign_submission_filero extends assign_submission_plugin {
         global $DB, $USER;
         $filesubmission = $this->get_filero_submission($submission->id);
         $fileroRes = "-";
-        if ($filesubmission AND assign_submission_filero::use_archiving($submission)) {
+        $useArchiving = assign_submission_filero::use_archiving($submission));
+        if ($filesubmission AND $useArchiving) {
             $fileroRes = $fileroFiles = $this->get_archived_files_info($submission);
             if (isset($_REQUEST['action']) and $_REQUEST['action'] != "grader"
                     and (is_siteadmin() or !user_has_role_assignment($USER->id, 5))) {
@@ -1033,15 +1034,17 @@ class assign_submission_filero extends assign_submission_plugin {
                             <button name="assignsubmission_filero_showLog" value="' . $submission->id . '" 
                              title="Studierende sehen diesen Button nicht!' . $info . '">Log anzeigen</button>'
                         . "</form>\n";
-                $currentsubmission = $DB->get_record('assign_submission',
-                        array('assignment' => $submission->assignment,'userid' => $submission->userid));
-                if ($currentsubmission && $currentsubmission->status == "submitted") {
-                    $fileroRes .= '<form method="POST" style="font-size:81%;display:inline;">'
-                    . '<button name="assignsubmission_filero_archive" value="' . $submission->id
-                    . '" title="Studierende sehen diesen Button nicht!' . $info . '">'
-                    . (strlen($fileroFiles) > 30 ? 'Erneut a' : 'A') . 'rchivieren</button>'
-                    . "</form>\n";
-                }
+            }
+        }
+        if ($useArchiving){
+            $currentsubmission = $DB->get_record('assign_submission',
+                    array('assignment' => $submission->assignment,'userid' => $submission->userid));
+            if ($currentsubmission && $currentsubmission->status == "submitted") {
+                $fileroRes .= '<form method="POST" style="font-size:81%;display:inline;">'
+                        . '<button name="assignsubmission_filero_archive" value="' . $submission->id
+                        . '" title="Studierende sehen diesen Button nicht!' . $info . '">'
+                        . (strlen($fileroFiles) > 30 ? 'Erneut a' : 'A') . 'rchivieren</button>'
+                        . "</form>\n";
             }
         }
         // $assign = $DB->get_record("assign", array("id" => $submission->assignment));
