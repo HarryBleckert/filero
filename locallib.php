@@ -1013,15 +1013,16 @@ class assign_submission_filero extends assign_submission_plugin {
             if (isset($_REQUEST['action']) and $_REQUEST['action'] != "grader"
                     and (is_siteadmin() or !user_has_role_assignment($USER->id, 5))) {
                 unset($_SESSION['filero_submit_for_grading_' . $submission->id]);
-                if (!empty(assignsubmission_filero_filero::LogfilePath($submissionid))) {
+                if (!empty(assignsubmission_filero_filero::LogfilePath($submission->id))) {
                     $cm = context_module::instance($this->assignment->get_course_module()->id);
                     $fileroRes .= '<form method="POST" target="showLog" style="font-size:81%;display:inline;">
                         <input type="hidden" name="id" value="' . $cm->instanceid . '">
-                        <input type="hidden" name="submissiontimemodified" value="'
-                            . $filesubmission->submissiontimemodified . '">
                         <button name="assignsubmission_filero_showLog" value="' . $submission->id . '" 
                          title="Studierende sehen diesen Button nicht!' . $info . '">Log anzeigen</button>'
                             . "</form>\n";
+                    /*      <input type="hidden" name="submissiontimemodified" value="'
+                            . $filesubmission->submissiontimemodified . '">
+                     */
                 }
                 // archive manually now if button was pressen
                 if (isset($_POST['assignsubmission_filero_archive'])
