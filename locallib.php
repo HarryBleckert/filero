@@ -1007,7 +1007,6 @@ class assign_submission_filero extends assign_submission_plugin {
         $pluginfo = assign_submission_filero::get_plugin_version();
         $info = "\n\n".$this->get_name()." Plugin Version: ".$pluginfo->version." - Release: "
                 .$pluginfo->release;
-        $fileroFiles = "";
         if ($useArchiving) {
             $fileroRes = $fileroFiles = $this->get_archived_files_info($submission);
             if (isset($_REQUEST['action']) and $_REQUEST['action'] != "grader"
@@ -1037,15 +1036,15 @@ class assign_submission_filero extends assign_submission_plugin {
                         assignsubmission_filero_observer::archive_feedback($submission);
                     }
                 }
-            }
-            $currentsubmission = $DB->get_record('assign_submission',
-                    array('assignment' => $submission->assignment,'userid' => $submission->userid));
-            if ($currentsubmission && $currentsubmission->status == "submitted") {
-                $fileroRes .= '<form method="POST" style="font-size:81%;display:inline;">'
-                        . '<button name="assignsubmission_filero_archive" value="' . $submission->id
-                        . '" title="Studierende sehen diesen Button nicht!' . $info . '">'
-                        . (strlen($fileroFiles) > 30 ? 'Erneut a' : 'A') . 'rchivieren</button>'
-                        . "</form>\n";
+                $currentsubmission = $DB->get_record('assign_submission',
+                        array('assignment' => $submission->assignment,'userid' => $submission->userid));
+                if ($currentsubmission && $currentsubmission->status == "submitted") {
+                    $fileroRes .= '<form method="POST" style="font-size:81%;display:inline;">'
+                            . '<button name="assignsubmission_filero_archive" value="' . $submission->id
+                            . '" title="Studierende sehen diesen Button nicht!' . $info . '">'
+                            . (strlen($fileroFiles) > 30 ? 'Erneut a' : 'A') . 'rchivieren</button>'
+                            . "</form>\n";
+                }
             }
         }
         // $assign = $DB->get_record("assign", array("id" => $submission->assignment));
